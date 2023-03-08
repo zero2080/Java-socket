@@ -12,6 +12,8 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CustomServer {
 	private final int port;
@@ -43,12 +45,24 @@ public class CustomServer {
 					 *   1-4. QueryString 등
 					 */
 
-					// request 라인별 확인
-					String line;
-					while((line = br.readLine())!= "" && line != null){
-						log.info(line);
-					}
+					HttpResponse response = new HttpResponse(dos);
+					Map<String,String> headers = new HashMap<>();
+					ResponseBody responseBody = new ResponseBody();
+					responseBody.add("title","글제목");
+					responseBody.add("content","본문");
+					responseBody.add("writer","개구리");
+					responseBody.add("createdAt","2023-03-10T10:00:00+09:00");
 
+					headers.put("Content-Type","application/json;charset=UTF-8");
+					headers.put("Content-Length",String.valueOf(responseBody.getLength()));
+
+					response.setStatus(HttpStatus.OK);
+					log.info("[CustomServer] set status.");
+					response.setHeaders(headers);
+					log.info("[CustomServer] set headers.");
+					response.setBody(responseBody);
+					log.info("[CustomServer] set body : {}",responseBody.getJson());
+					response.send();
 				}
 			}
 		} catch (IOException e) {
