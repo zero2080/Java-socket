@@ -34,8 +34,6 @@ public class ResponseBody {
 				sb.append("\"");
 				if(keys.hasNext()){
 					sb.append(", ");
-				}else{
-					sb.append("");
 				}
 			}
 			sb.append("}");
@@ -43,7 +41,7 @@ public class ResponseBody {
 		}
 	}
 
-	public int getLength() {
+	public int length() {
 		try {
 			return json.getBytes("UTF-8").length;
 		} catch (UnsupportedEncodingException e) {
